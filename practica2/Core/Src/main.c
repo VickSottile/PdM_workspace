@@ -118,7 +118,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+	delayInit(&led1, time);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -128,8 +128,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    delayInit(led1 *delay, time);
-    ready=delayRead(led1 *delay);
+	ready = delayRead(&led1);
     if (ready==true)
     {
       HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
