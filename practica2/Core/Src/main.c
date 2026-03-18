@@ -44,7 +44,7 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
  delay_t led1;
  bool_t ready=false;
- tick_t time=100;
+ tick_t time=1000;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
