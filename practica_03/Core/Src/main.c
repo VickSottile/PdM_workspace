@@ -50,6 +50,7 @@ UART_HandleTypeDef huart2;
  delay_t led1;
  tick_t delayV[]={LED1_DELAY, LED2_DELAY, LED3_DELAY};
  bool_t ready=false;
+ bool_t running_led1=false;//indica si el led1 ya está running
  tick_t time=LED1_DELAY;;
  ent_t veces=0; //variable para contar las veces que se encendio o apagó el led
  ent_t i=0; //variable auxiliar para recorrer el vector de tiempo
@@ -125,6 +126,8 @@ int main(void)
 		{
 			i=0;
 		}
+    running_led1 = delayIsRunning(&led1);
+    if(!running_led1) // si running esta corriendo puede cambiar el valor de delay
 		delayWrite(&led1, delayV[i] );
 	}
 

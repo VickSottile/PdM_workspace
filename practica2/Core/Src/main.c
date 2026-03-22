@@ -66,7 +66,7 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN 0 */
 void delayInit( delay_t * delay, tick_t duration )// carga el valor de duración del retardo en la estructura
   {
-	if(delay=NULL)
+	if(delay==NULL)
 	{
 		return;
 	}

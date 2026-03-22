@@ -30,4 +30,5 @@ typedef struct{
 void delayInit(delay_t * delay, tick_t duration ); // carga el valor de duración del retardo en la estructura
 bool_t delayRead(delay_t * delay ); //verifica el estado del flag running
 void delayWrite(delay_t * delay, tick_t duration ); //permite cambiar el tiempo de duración de un delay existente
+bool_t delayIsRunning(delay_t * delay);
 #endif /* API_INC_API_DELAY_H_ */

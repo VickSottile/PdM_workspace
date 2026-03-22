@@ -9,7 +9,7 @@
 
 void delayInit( delay_t * delay, tick_t duration )// carga el valor de duración del retardo en la estructura
   {
-	if(delay=NULL)
+	if(delay==NULL)
 	{
 		return;
 	}
@@ -40,4 +40,16 @@ void delayInit( delay_t * delay, tick_t duration )// carga el valor de duración
   {
     delay->duration=duration;
   }
+
+  bool_t delayIsRunning(delay_t * delay)
+  {
+    if(delay==NULL || delay->running<0) //Si puntero es NULL o running no es valido retornar false
+	{
+		return false; 
+	}
+    return (delay->running);
+
+
+  }
+
 
