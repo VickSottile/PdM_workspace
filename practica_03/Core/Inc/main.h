@@ -55,19 +55,6 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-typedef uint32_t tick_t; // Qué biblioteca se debe incluir para que esto compile? stdint.h
-//se define en un typedef para mayor portabilidad y se usa tick_t como "tics del sistema"
-typedef bool bool_t;	  // Qué biblioteca se debe incluir para que esto compile? stsbool.h
-typedef uint8_t ent_t;
-typedef struct{
-   tick_t startTime; //cuándo comenzó el delay
-   tick_t duration; //cuánto debe durar
-   bool_t running;  //Está corriendo
-} delay_t;
-void delayInit( delay_t * delay, tick_t duration ); // carga el valor de duración del retardo en la estructura
-bool_t delayRead( delay_t * delay ); //verifica el estado del flag running
-void delayWrite( delay_t * delay, tick_t duration ); //permite cambiar el tiempo de duración de un delay existente
-
 
 
 /* USER CODE END EFP */
