@@ -58,6 +58,7 @@ void Error_Handler(void);
 typedef uint32_t tick_t; // Qué biblioteca se debe incluir para que esto compile? stdint.h
 //se define en un typedef para mayor portabilidad y se usa tick_t como "tics del sistema"
 typedef bool bool_t;	  // Qué biblioteca se debe incluir para que esto compile? stsbool.h
+typedef uint8_t ent_t;
 typedef struct{
    tick_t startTime; //cuándo comenzó el delay
    tick_t duration; //cuánto debe durar

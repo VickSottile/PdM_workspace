@@ -1,5 +1,20 @@
 Especializacion en Sistemas Emebebidos - FIUBA - LABSE
 
+# Práctica 2 - Delay no bloqueante
+
+ Descripción
+
+Este proyecto implementa un delay no bloqueante utilizando la función HAL_GetTick() en una placa STM32.
+
+El objetivo es permitir el parpadeo de LEDs con distintos períodos sin detener la ejecución del programa.
+
+ Funcionalidad
+
+* Inicialización de estructuras delay_t
+* Lectura de tiempo transcurrido sin bloqueo
+* Control de múltiples delays simultáneos
+
+
 Estudiante: Ing Sottile, Victoria
 Materia: Programacion de Microcontroladores
 

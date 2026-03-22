@@ -42,9 +42,16 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+#define LED1_DELAY 500
+#define LED2_DELAY 100
+#define LED3_DELAY 50
+#define BLINK_TIMES 5
  delay_t led1;
+ tick_t delayV[]={LED1_DELAY, LED2_DELAY, LED3_DELAY};
  bool_t ready=false;
- tick_t time=1000;
+ tick_t time=LED1_DELAY;;
+ ent_t veces=0; //variable para contar las veces que se encendio o apagó el led
+ ent_t i=0; //variable auxiliar para recorrer el vector de tiempo
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,10 +66,15 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN 0 */
 void delayInit( delay_t * delay, tick_t duration )// carga el valor de duración del retardo en la estructura
   {
+	if(delay=NULL)
+	{
+		return;
+	}
     delay->duration=duration;
     delay->running=false;
   }
   bool_t delayRead( delay_t * delay ) //verifica el estado del flag running
+  //si chequeo que el puntero no sea null que debo poner? porque tanto true como false tienen significado en la logica. se podría llamar a un Errorhandler o reiniciar el programa
   {
     if(delay->running==false)
     {
@@ -118,7 +130,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-	delayInit(&led1, time);
+	delayInit(&led1, delayV[i]);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -128,12 +140,25 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+
 	ready = delayRead(&led1);
     if (ready==true)
     {
       HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+      veces++;
     }
-	  
+	if (veces>2*BLINK_TIMES)
+	{
+		//Si ya parpadeó las veces necesarias cambio el tiempo
+		veces=0;
+		i++;
+		if (i>(sizeof(delayV)/sizeof(delayV[0]))-1)
+		{
+			i=0;
+		}
+		delayWrite(&led1, delayV[i] );
+	}
 
 
 
