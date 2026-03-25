@@ -19,6 +19,10 @@ void delayInit( delay_t * delay, tick_t duration )// carga el valor de duración
   bool_t delayRead( delay_t * delay ) //verifica el estado del flag running
   //si chequeo que el puntero no sea null que debo poner? porque tanto true como false tienen significado en la logica. se podría llamar a un Errorhandler o reiniciar el programa
   {
+	  if(delay==NULL) //Si puntero es NULL  retornar false
+	 	{
+	 		return false;
+	 	}
     if(delay->running==false)
     {
       delay->startTime=HAL_GetTick();
@@ -38,7 +42,12 @@ void delayInit( delay_t * delay, tick_t duration )// carga el valor de duración
   }
   void delayWrite( delay_t * delay, tick_t duration )
   {
+	  if(delay==NULL) //Si puntero es NULL
+	  	 	{
+	  	 		return;
+	  	 	}else{
     delay->duration=duration;
+	  	 	}
   }
 
   bool_t delayIsRunning(delay_t * delay)
