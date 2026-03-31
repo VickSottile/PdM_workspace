@@ -6,6 +6,8 @@
  */
 /* Includes ------------------------------------------------------------------*/
 #include "API_delay.h"
+#include <stdint.h>
+#include <stdbool.h>
 
 void delayInit( delay_t * delay, tick_t duration )// carga el valor de duración del retardo en la estructura
   {

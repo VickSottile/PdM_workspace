@@ -31,8 +31,6 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdint.h>
-#include <stdbool.h>
 
 /* USER CODE END Includes */
 
@@ -56,10 +54,7 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
-static void debounceFSM_init();		// debe cargar el estado inicial
-static void debounceFSM_update();	// debe leer las entradas, resolver la lógica de transición de estados y actualizar las salidas
-static void buttonPressed();			// debe encender el LED
-static void buttonReleased();		// debe apagar el LED
+
 
 /* USER CODE END EFP */
 
@@ -81,13 +76,7 @@ static void buttonReleased();		// debe apagar el LED
 
 /* USER CODE BEGIN Private defines */
 
-// Nuevo tipo de datos enumerado llamado estadoMEF_t
-typedef enum{
-    BUTTON_UP,
-	BUTTON_FALLING,
-	BUTTON_DOWN,
-	BUTTON_RISSING
-} estadoMEF_t;
+
 
 
 

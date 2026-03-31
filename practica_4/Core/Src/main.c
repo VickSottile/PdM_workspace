@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "API_delay.h"
+#include "API_debounce.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -45,19 +46,14 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 #define LED1_DELAY 500
 #define LED2_DELAY 100
-#define LED3_DELAY 50
-#define BLINK_TIMES 5
-#define DEBTIME 40
+
  delay_t led1;
- tick_t delayV[]={LED1_DELAY, LED2_DELAY, LED3_DELAY};
- tick_t debounce;
+ tick_t delayV[]={LED1_DELAY, LED2_DELAY};
  bool_t ready=false;
  bool_t running_led1=false;//indica si el led1 ya está running
  tick_t time=LED1_DELAY;;
  ent_t veces=0; //variable para contar las veces que se encendio o apagó el led
  ent_t i=0; //variable auxiliar para recorrer el vector de tiempo
- estadoMEF_t estadoActual; // variable que refleja el estado de la MEF
-
 
 
 /* USER CODE END PV */
@@ -79,61 +75,7 @@ static void MX_USART2_UART_Init(void);
 
 
 
-static void debounceFSM_init() //  carga el estado inicial
-{
-	estadoActual = BUTTON_UP;
-	buttonReleased();
-	}
-static void debounceFSM_update()	// debe leer las entradas, resolver la lógica de transición de estados y actualizar las salidas
-{
-	switch (estadoActual){
-		case BUTTON_UP:
-			if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET){
-				estadoActual=BUTTON_FALLING;
-				debounce=HAL_GetTick();
-			}
-				break;
-		case BUTTON_FALLING:
-			if((HAL_GetTick() - debounce) >= DEBTIME){
-				//Aca antes del if tengo que hacer otro if y preguntar si el tiempo es mayor a 40ms comparando la variable y ahi recien hacer lo que sigue
-				if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_RESET){
-				estadoActual=BUTTON_DOWN;
-				buttonPressed();
-			}else{
-				estadoActual=BUTTON_UP;
-			}
-				break;
-		case BUTTON_DOWN:
-			if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_SET){
-				estadoActual=BUTTON_RISSING;
-				debounce=HAL_GetTick();
-				//Aca deberia iniciar un contador llamar a una funcion o solo usar una variable y guardar el tiempo de la Hall como en BUTTON_UP
-			}}
-				break;
-		case BUTTON_RISSING:
-			//Aca la misa logica que en BUTTON_FALLING
-			if((HAL_GetTick() - debounce) >= DEBTIME){
-			if(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) == GPIO_PIN_SET){
-				estadoActual=BUTTON_UP;
-				buttonReleased();
-			}else{
-				estadoActual=BUTTON_DOWN;
-			}}
-				break;
-		default:
-			debounceFSM_init();
-				break;
 
-	}
-}
-
-static void buttonPressed(void){			// debe encender el LED
-
-	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
-}
-static void buttonReleased(void){		// debe apagar el LED
-	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-}
 /* USER CODE END 0 */
 
 /**
@@ -155,6 +97,7 @@ int main(void)
   debounceFSM_init();
 
 
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -168,7 +111,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-	delayInit(&led1, delayV[i]);
+  delayInit(&led1, delayV[i]);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -179,35 +122,55 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  debounceFSM_update();
+	  if (readKey())
+	  {
+		  i++;
+		  if (i>(sizeof(delayV)/sizeof(delayV[0]))-1)
+		  	{
+		  		i=0;
+		  	}
+
+				delayWrite(&led1, delayV[i] );
+
+	  }
+		  ready = delayRead(&led1);
+		  if (ready==true)
+		  	 {
+		  	     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+		  	 }
+
+	  //Agregar aca el cambio de frecuencia del parpadeo
+
+		/*ready = delayRead(&led1);
+	    if (ready==true)
+	    {
+	      HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+	      veces++;
+	    }
+		if (veces>2*BLINK_TIMES)
+		{
+			//Si ya parpadeó las veces necesarias cambio el tiempo
+			veces=0;
+			i++;
+			if (i>(sizeof(delayV)/sizeof(delayV[0]))-1)
+			{
+				i=0;
+			}
+	    running_led1 = delayIsRunning(&led1);
+	    if(!running_led1) // si running esta corriendo puede cambiar el valor de delay
+			delayWrite(&led1, delayV[i] );
+		}
+
+
+
+	  }*/
 
 
 		  }
 
 
 
-	/*ready = delayRead(&led1);
-    if (ready==true)
-    {
-      HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-      veces++;
-    }
-	if (veces>2*BLINK_TIMES)
-	{
-		//Si ya parpadeó las veces necesarias cambio el tiempo
-		veces=0;
-		i++;
-		if (i>(sizeof(delayV)/sizeof(delayV[0]))-1)
-		{
-			i=0;
-		}
-    running_led1 = delayIsRunning(&led1);
-    if(!running_led1) // si running esta corriendo puede cambiar el valor de delay
-		delayWrite(&led1, delayV[i] );
-	}
 
-
-
-  }*/
   /* USER CODE END 3 */
 }
 
