@@ -12,7 +12,9 @@
 #include "stm32f4xx_hal.h"
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include "string.h"
+
 
 typedef bool bool_t;
 bool_t uartInit(); //inicializa la UART

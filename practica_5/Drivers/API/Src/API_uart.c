@@ -10,6 +10,9 @@
 UART_HandleTypeDef huart2;
 
 HAL_StatusTypeDef transmitido;
+
+
+//Funciones
 bool_t uartInit(){ //inicializa la UART
 	  huart2.Instance = USART2;
 	  huart2.Init.BaudRate = 115200;
@@ -25,6 +28,21 @@ bool_t uartInit(){ //inicializa la UART
 		  return false;
 
 	  } else {
+		    char buffer[200];
+
+		    sprintf(buffer,
+		        "UART Config:\r\n"
+		        "BaudRate: %lu\r\n"
+		        "WordLength: %d\r\n"
+		        "StopBits: %d\r\n"
+		        "Parity: %d\r\n",
+		        huart2.Init.BaudRate,
+		        huart2.Init.WordLength,
+		        huart2.Init.StopBits,
+		        huart2.Init.Parity
+		    );
+
+		    uartSendStringSize((uint8_t*)buffer, strlen(buffer));
 		  return true;
 		  //Implementar envío de configuración
 	  }
@@ -38,7 +56,9 @@ void uartSendString(uint8_t *pstring) //envia el  String
 		if (transmitido != HAL_OK)
 			{
 				Error_Handler();
+				return;
 			}
+
 	}
 		//Se podria implementar un parpadeo de leds con codigo de error
 		return;
@@ -57,4 +77,7 @@ void uartSendStringSize(uint8_t * pstring, uint16_t size) {//envía el tamaño d
 	return;
 }
 void uartReceiveStringSize(uint8_t * pstring, uint16_t size) // Recibe el tamaño del string
-{}
+{
+	HAL_UART_Receive (&huart2, pstring, size,100);
+}
+

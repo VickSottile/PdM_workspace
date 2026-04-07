@@ -20,6 +20,7 @@
 #include "main.h"
 #include "API_delay.h"
 #include "API_debounce.h"
+#include "API_uart.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -109,7 +110,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART2_UART_Init();
+  //MX_USART2_UART_Init();
+  uartInit();
   /* USER CODE BEGIN 2 */
   delayInit(&led1, delayV[i]);
   /* USER CODE END 2 */
