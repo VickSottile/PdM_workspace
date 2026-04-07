@@ -11,6 +11,7 @@ UART_HandleTypeDef huart2;
 
 HAL_StatusTypeDef transmitido;
 
+static  bool_t uartRxReady=false; // variable interna que refleja si hay datos para leer
 
 //Funciones
 bool_t uartInit(){ //inicializa la UART
@@ -30,6 +31,8 @@ bool_t uartInit(){ //inicializa la UART
 	  } else {
 		    char buffer[200];
 
+		    //utilizo la funcion sprintf que me permite armar el buffer para enviar
+		    //transformando todo a un string
 		    sprintf(buffer,
 		        "UART Config:\r\n"
 		        "BaudRate: %lu\r\n"
@@ -42,9 +45,9 @@ bool_t uartInit(){ //inicializa la UART
 		        huart2.Init.Parity
 		    );
 
-		    uartSendStringSize((uint8_t*)buffer, strlen(buffer));
+		    uartSendStringSize((uint8_t*)buffer, strlen(buffer)); // funciona ok
 		  return true;
-		  //Implementar envío de configuración
+
 	  }
 
 }
@@ -68,6 +71,7 @@ void uartSendStringSize(uint8_t * pstring, uint16_t size) {//envía el tamaño d
 	if ((size>=1 && size<=256)&&(pstring!=NULL))
 	{
 	transmitido = HAL_UART_Transmit(&huart2, pstring,size,100);
+	uartRxReady = false;
 	if (transmitido != HAL_OK)
 	{
 		Error_Handler();
@@ -78,6 +82,21 @@ void uartSendStringSize(uint8_t * pstring, uint16_t size) {//envía el tamaño d
 }
 void uartReceiveStringSize(uint8_t * pstring, uint16_t size) // Recibe el tamaño del string
 {
-	HAL_UART_Receive (&huart2, pstring, size,100);
+	uartRxReady = false;
+	if (pstring!=NULL)
+		{
+		transmitido =HAL_UART_Receive (&huart2, pstring, size,100);
+		if (transmitido != HAL_OK){
+			uartRxReady = false; // timeout NO es error fatal
+		}else{
+			uartRxReady = true;
+		}
+		}
+	return;
 }
 
+//funcion que permite leer la variable static uartRxReady que indica si hay datos para leer
+bool_t uartDataAvailable(void)
+{
+    return uartRxReady;
+}

@@ -55,6 +55,8 @@
  tick_t time=LED1_DELAY;;
  ent_t veces=0; //variable para contar las veces que se encendio o apagó el led
  ent_t i=0; //variable auxiliar para recorrer el vector de tiempo
+ uint8_t dato;
+ bool_t rAvailable;
 
 
 /* USER CODE END PV */
@@ -123,6 +125,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  uartReceiveStringSize(&dato, 1);
+	  rAvailable = uartDataAvailable();
+	  if (rAvailable){
+	  uartSendStringSize(&dato, 1);
+	  }
 	  debounceFSM_update();
 	  if (readKey())
 	  {
