@@ -126,7 +126,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  uartReceiveStringSize(&dato, 1);
-	  rAvailable = uartDataAvailable();
+	  rAvailable = uartDataAvailable(); //almacena true si hay datos aun no leidos
 	  if (rAvailable){
 	  uartSendStringSize(&dato, 1);
 	  }

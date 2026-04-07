@@ -6,7 +6,7 @@
  */
 #include "API_uart.h"
 
-
+#define TIMEOUT_UART2 10
 UART_HandleTypeDef huart2;
 
 HAL_StatusTypeDef transmitido;
@@ -55,7 +55,7 @@ void uartSendString(uint8_t *pstring) //envia el  String
 {
 	if (pstring!=NULL)
 	{
-		transmitido = HAL_UART_Transmit(&huart2, pstring, strlen((char*)pstring),100);
+		transmitido = HAL_UART_Transmit(&huart2, pstring, strlen((char*)pstring),TIMEOUT_UART2);
 		if (transmitido != HAL_OK)
 			{
 				Error_Handler();
@@ -63,15 +63,15 @@ void uartSendString(uint8_t *pstring) //envia el  String
 			}
 
 	}
-		//Se podria implementar un parpadeo de leds con codigo de error
+
 		return;
 }
 void uartSendStringSize(uint8_t * pstring, uint16_t size) {//envía el tamaño del string
 	//size entre 1 y 256 (valor razonable que se puede ajustar)
 	if ((size>=1 && size<=256)&&(pstring!=NULL))
 	{
-	transmitido = HAL_UART_Transmit(&huart2, pstring,size,100);
-	uartRxReady = false;
+	transmitido = HAL_UART_Transmit(&huart2, pstring,size,TIMEOUT_UART2);
+
 	if (transmitido != HAL_OK)
 	{
 		Error_Handler();
@@ -85,11 +85,14 @@ void uartReceiveStringSize(uint8_t * pstring, uint16_t size) // Recibe el tamañ
 	uartRxReady = false;
 	if (pstring!=NULL)
 		{
-		transmitido =HAL_UART_Receive (&huart2, pstring, size,100);
-		if (transmitido != HAL_OK){
-			uartRxReady = false; // timeout NO es error fatal
+		transmitido =HAL_UART_Receive (&huart2, pstring, size,TIMEOUT_UART2);
+		if (transmitido== HAL_ERROR){
+			Error_Handler();
+		}
+		if (transmitido == HAL_TIMEOUT){
+			uartRxReady = false; // Saque el errorhandler porque se colgaba al llamarlo por timeout
 		}else{
-			uartRxReady = true;
+			uartRxReady = true; // significa que hay datos recibidos disponibles
 		}
 		}
 	return;
