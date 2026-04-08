@@ -8,29 +8,107 @@
 #ifndef API_SRC_API_CMDPARSER_C_
 #define API_SRC_API_CMDPARSER_C_
 
-#define CMD_MAX_LINE //incluye '/0'
-#define CMD_MAX_TOKENS // COMANDO + 2 argumentos
 
+
+#define CMD_MAX_LINE 64//incluye '/0'
+#define CMD_MAX_TOKENS 3// COMANDO + 2 argumentos
+
+#include <stdio.h>
+#include "API_cmdparser.h"
+#include "API_uart.h"
+
+
+ //estados de la MEF UART
 typedef enum{
-	CMD_OK=0,
-	CMD_ERR_OVERFLOW,
-	CMD_ERR_SYNTAX,
-	CMD_ERR_UNKNOWN,
-	CMD_ERR_ARG
-} cmd_status_t;
+	CMD_IDLE=0,
+	CMD_RECEIVING,
+	CMD_ERROR,
+	CMD_PROCESS,
+	CMD_EXEC
+} cmd_state_t;
+
+cmd_state_t state=CMD_IDLE; //state guarda el estado de la MEF, inicializa en CMD_IDLE
+cmd_status_t status= CMD_OK;
+
+uint8_t buffer[CMD_MAX_LINE];
+static uint8_t i=0; //index del buffer
+static uint8_t comment=0; //bandera para detectar comentarios que son los que empiezan con # o //
+bool_t received_uart=false;
 
 //Prototipo de funciones públicas
 
 //Inicializa el módulo parser de comandos
-void cmdParserInit(void);
+void cmdParserInit(void){
+	 uartInit();
+
+}
+
+bool_t cmdProcessLine(){
+	return true;
+
+}
 
 
 // Maquina de estados del parser. Debe ser llamada períodicamente desde el bucle
 // Procesa hasta 16 bytes por invocación (no bloqueante).
-void cmdPoll(void);
+void cmdPoll(void)
+{
+	uint8_t dato;
+	bool_t recieved_uart=false;
+	uartReceiveStringSize(&dato, 1);
+	received_uart=uartDataAvailable();
+	if(received_uart)
+	{
+		if(i==0)
+		{
+			if(dato=='#')
+			{
+				comment=1; //bandera en 1 es un comentario
+			}
+			else{
+				if(dato=='/')
+				{
+					comment=2; //bandera en 2 puede ser un comentario, esperar sgte valor
+				} else
+				{
+				comment=0; //bandera en 0 es una linea normal
+				}
+			}
+		}
+
+		if((i==1) && (comment==2) && (dato=='/'))
+				{
+					comment=1;	//si el primer caracter fue una / y el segundo tmb es un comentario
+				}
+		if((i<CMD_MAX_LINE) && (comment != 1))
+		{
+			if((dato !='\n') && (dato !='\r'))
+			{
+				buffer[i]=dato;
+				i++;
+			}else //caracter de terminacion
+			{
+				i=0;
+				cmdProcessLine();
+			}
+		}
+			else{ //overflow
+				i=0;
+				status=CMD_ERR_OVERFLOW;
+			}
+		}
+	return;
+	}
+
+
+
+
+
 
 
 //Imprime por UART la lista de comandos disponibles
-void cmdPrintHelp(void);
+void cmdPrintHelp(void){
+
+}
 
 #endif /* API_SRC_API_CMDPARSER_C_ */
