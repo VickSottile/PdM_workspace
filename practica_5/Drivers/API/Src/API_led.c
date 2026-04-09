@@ -37,20 +37,27 @@ void ledOff(void){		// debe apagar el LED
 }
 
 void ledUpdate(){
-	if (led==LED_TOGGLE){
-		ready=delayRead(&ledDelay);
-		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	}
-	if (led==LED_OFF){
-		ledOff();
-	}
-	if (led==LED_ON){
-			ledOn();
+    switch(led){
+
+        case LED_TOGGLE:
+            if(delayRead(&ledDelay)){
+                HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+            }
+            break;
+
+        case LED_OFF:
+            HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+            break;
+
+        case LED_ON:
+            HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+            break;
+    }
 		}
 
 
 
-}
+
 
 void ledToggle(uint32_t tiempo){
 	led = LED_TOGGLE;

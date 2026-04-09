@@ -205,6 +205,10 @@ void cmdPoll(void) {
 
 //Imprime por UART la lista de comandos disponibles
 void cmdPrintHelp(void) {
+	uartSendString((uint8_t*)"HELP:\r\n");
+	uartSendString((uint8_t*)"LED ON para encender el led \r\n");
+	uartSendString((uint8_t*)"LED OFF para apagar el led \r\n");
+	uartSendString((uint8_t*)"LED TOGGLE para parpadear el led \r\n");
 	return;
 }
 
