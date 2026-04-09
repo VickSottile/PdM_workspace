@@ -115,7 +115,7 @@ int main(void)
     if (ready==true)
     {
       HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-      veces++;
+
     }
 	if (veces>2*BLINK_TIMES)
 	{

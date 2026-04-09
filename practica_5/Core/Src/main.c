@@ -48,6 +48,10 @@
 #define LED1_DELAY 500
 #define LED2_DELAY 100
 
+#include "API_uart.h" //biblioteca para manejar UART
+#include "API_cmdparser.h" //MEF parseo
+#include "API_led.h" //Manejo independiente de LED
+
  delay_t led1;
  tick_t delayV[]={LED1_DELAY, LED2_DELAY};
  bool_t ready=false;
@@ -57,6 +61,7 @@
  ent_t i=0; //variable auxiliar para recorrer el vector de tiempo
  uint8_t dato;
  bool_t rAvailable;
+ led_state_t ledUART = LED_OFF;
 
 
 /* USER CODE END PV */
@@ -125,7 +130,15 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  uartReceiveStringSize(&dato, 1);
+
+
+
+
+	 cmdPoll(); //MEF + UART
+	 ledUpdate();
+
+	  /*PUNTO 1 y ECHO*/
+	 /* uartReceiveStringSize(&dato, 1);
 	  rAvailable = uartDataAvailable(); //almacena true si hay datos aun no leidos
 	  if (rAvailable){
 	  uartSendStringSize(&dato, 1);
@@ -147,7 +160,7 @@ int main(void)
 		  	 {
 		  	     HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 		  	 }
-
+*/
 	  //Agregar aca el cambio de frecuencia del parpadeo
 
 		/*ready = delayRead(&led1);

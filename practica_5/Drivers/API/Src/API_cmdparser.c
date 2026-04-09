@@ -5,26 +5,24 @@
  *      Author: vicks
  */
 
-#ifndef API_SRC_API_CMDPARSER_C_
-#define API_SRC_API_CMDPARSER_C_
+
 
 #define CMD_MAX_LINE 64//incluye '/0'
 #define CMD_MAX_TOKENS 3// COMANDO + 2 argumentos
+#define BLINK_FREC 500 //frecuencia de parpadeo
 
 #include <stdio.h>
 #include "API_cmdparser.h"
 #include "API_uart.h"
 #include <string.h>
 #include <stdlib.h>
+#include "API_led.h"
 
 //estados de la MEF UART
 typedef enum {
 	CMD_IDLE = 0, CMD_RECEIVING, CMD_ERROR, CMD_PROCESS, CMD_EXEC
 } cmd_state_t;
 
-typedef enum {
-	LED_OFF = 0, LED_ON, LED_TOGGLE
-} led_state_t;
 
 
 cmd_state_t state = CMD_IDLE; //state guarda el estado de la MEF, inicializa en CMD_IDLE
@@ -52,12 +50,13 @@ cmd_status_t cmdProcessLine() {
 		return CMD_OK;
 	}
 	//Encender LED
-	if(strcmp((char*)buffer,"LED_ON")==0)
+	if(strcmp((char*)buffer,"LED ON")==0)
 	{
+		uartSendString((uint8_t*)"Voy a encender el led\r\n");
 		//encencer led
-		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+		ledOn();
 		led=LED_ON;
-		//Enviar por UART que se encendio
+
 		return CMD_OK;
 	}
 	 //Apagar LED
@@ -65,10 +64,17 @@ cmd_status_t cmdProcessLine() {
 		//apagar led
 		HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 		led=LED_OFF;
-		//Enviar por UART que se apagó
+		ledOff();
 		return CMD_OK;
 	}
 
+	if(strcmp((char*)buffer,"LED TOGGLE")==0){
+		//llamar a parpadear LED desde API_DEBOUNCE o el API_DELAYC
+
+		led=LED_TOGGLE;
+		ledToggle(BLINK_FREC);
+		return CMD_OK;
+	}
 
 	if(strcmp((char*)buffer,"STATUS")==0){
 			switch(led)
@@ -83,10 +89,14 @@ cmd_status_t cmdProcessLine() {
 				uartSendString((uint8_t*)"LED is TOGGLING\r\n");
 				break;
 			default:
-				uartSendString((uint8_t*)"ERROR put in contact with service\r\n");
-				break;
+				uartSendString((uint8_t*)"ERROR: unknown command\r\n");
+				return CMD_ERR_UNKNOWN;
 			}
 			return CMD_OK;
+
+
+
+
 		}
 
 
@@ -99,16 +109,18 @@ void cmdPoll(void) {
 	uint8_t dato;
 
 	uartReceiveStringSize(&dato, 1);
+	 if (uartDataAvailable()) {
+	        uartSendStringSize(&dato,1); // echo
+	    }
 
-	if (!uartDataAvailable()) {
-		return;
-	}
+
 	switch (state) {
 	case CMD_IDLE:
 
 		if (i == 0) {
 			if (dato == '#') {
 				comment = 1; //bandera en 1 es un comentario
+
 			} else {
 				if (dato == '/') {
 					comment = 2; //bandera en 2 puede ser un comentario, esperar sgte valor
@@ -117,33 +129,52 @@ void cmdPoll(void) {
 				}
 			}
 		}
+
 		state = CMD_RECEIVING;
+
 		break;
 
 	case CMD_RECEIVING:
 
 		//detección de comentario tipo "//"
+		//uartSendString((uint8_t*)"Estoy en Receiving\r\n");
 
 		if ((i == 1) && (comment == 2) && (dato == '/')) {
 			comment = 1;//si el primer caracter fue una / y el segundo tmb es un comentario
 		}
 		if ((i < CMD_MAX_LINE - 1) && (comment != 1)) {
-			if ((dato != '\n') && (dato != '\r')) {
+			if ((dato != '\n') && (dato != '\r') && (dato != '\r\n')) {
 				buffer[i] = dato;
 				i++;
 			} else //caracter de terminacion
 			{
-				buffer[i] = '\0';
-				i = 0;
-				state = CMD_PROCESS;
+			    if(i == 0){
+			        // si la linea esta vacia la ignora
+			        state = CMD_IDLE;
+			    } else {
+			        buffer[i] = '\0';
+			        i = 0;
+			        state = CMD_PROCESS;
+			        //uartSendString((uint8_t*)"Cambiar a CMDPROCESS\r\n");
+			        //chequeo lo que voy a procesar
+			        uartSendString((uint8_t*)"CMD: ");
+			        uartSendString((uint8_t*)buffer);
+			        uartSendString((uint8_t*)"\r\n");
+			    }
 			}
 		} else { //overflow
 			i = 0;
 			state = CMD_ERROR;
 			status = CMD_ERR_OVERFLOW;
 		}
+
+
 		break;
 	case CMD_PROCESS:
+		uartSendString((uint8_t*)"Estoy en CMDPROCESS\r\n");
+		 uartSendString((uint8_t*)"CMD: ");
+		 uartSendString((uint8_t*)buffer);
+		 uartSendString((uint8_t*)"\r\n");
 		status = cmdProcessLine();
 		state = CMD_IDLE;
 		break;
@@ -174,4 +205,4 @@ void cmdPrintHelp(void) {
 	return;
 }
 
-#endif /* API_SRC_API_CMDPARSER_C_ */
+
