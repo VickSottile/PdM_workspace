@@ -98,6 +98,7 @@ cmd_status_t cmdProcessLine() {
 
 
 		}
+	memset(buffer, 0, CMD_MAX_LINE);
 
 
 
@@ -109,9 +110,7 @@ void cmdPoll(void) {
 	uint8_t dato;
 
 	uartReceiveStringSize(&dato, 1);
-	 if (uartDataAvailable()) {
-	        uartSendStringSize(&dato,1); // echo
-	    }
+
 
 
 	switch (state) {
@@ -122,6 +121,7 @@ void cmdPoll(void) {
 				comment = 1; //bandera en 1 es un comentario
 
 			} else {
+				buffer[i] = dato;
 				if (dato == '/') {
 					comment = 2; //bandera en 2 puede ser un comentario, esperar sgte valor
 				} else {
@@ -138,14 +138,20 @@ void cmdPoll(void) {
 
 		//detección de comentario tipo "//"
 		//uartSendString((uint8_t*)"Estoy en Receiving\r\n");
+		if (!uartDataAvailable()) {
+		        return; // solo salgo si NO hay dato
+		    }
+		uartSendString((uint8_t*)"CMD: ");
+		uartSendString((uint8_t*)buffer);
+		uartSendString((uint8_t*)"\r\n");
 
 		if ((i == 1) && (comment == 2) && (dato == '/')) {
 			comment = 1;//si el primer caracter fue una / y el segundo tmb es un comentario
 		}
 		if ((i < CMD_MAX_LINE - 1) && (comment != 1)) {
-			if ((dato != '\n') && (dato != '\r') && (dato != '\r\n')) {
-				buffer[i] = dato;
-				i++;
+			if ((dato != '\n') && (dato != '\r')) {
+				buffer[i++] = dato;
+
 			} else //caracter de terminacion
 			{
 			    if(i == 0){
@@ -193,9 +199,6 @@ void cmdPoll(void) {
 	}
 	return;
 }
-
-
-
 
 
 
