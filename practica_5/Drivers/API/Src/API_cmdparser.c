@@ -33,7 +33,7 @@ cmd_status_t status= CMD_OK;
 uint8_t buffer[CMD_MAX_LINE];
 static uint8_t i=0; //index del buffer
 static uint8_t comment=0; //bandera para detectar comentarios que son los que empiezan con # o //
-bool_t received_uart=false;
+
 
 //Prototipo de funciones públicas
 
@@ -43,8 +43,8 @@ void cmdParserInit(void){
 
 }
 
-bool_t cmdProcessLine(){
-	return true;
+cmd_status_t cmdProcessLine(){
+	return CMD_OK;
 
 }
 
@@ -54,11 +54,16 @@ bool_t cmdProcessLine(){
 void cmdPoll(void)
 {
 	uint8_t dato;
-	bool_t recieved_uart=false;
+
 	uartReceiveStringSize(&dato, 1);
-	received_uart=uartDataAvailable();
-	if(received_uart)
+
+	if(!uartDataAvailable()){
+		return;
+	}
+	switch(state)
 	{
+	case CMD_IDLE:
+
 		if(i==0)
 		{
 			if(dato=='#')
@@ -75,12 +80,18 @@ void cmdPoll(void)
 				}
 			}
 		}
+		state=CMD_RECEIVING;
+		break;
+
+	case CMD_RECEIVING:
+
+		//detección de comentario tipo "//"
 
 		if((i==1) && (comment==2) && (dato=='/'))
 				{
 					comment=1;	//si el primer caracter fue una / y el segundo tmb es un comentario
 				}
-		if((i<CMD_MAX_LINE) && (comment != 1))
+		if((i<CMD_MAX_LINE-1) && (comment != 1))
 		{
 			if((dato !='\n') && (dato !='\r'))
 			{
@@ -88,15 +99,34 @@ void cmdPoll(void)
 				i++;
 			}else //caracter de terminacion
 			{
-				i=0;
-				cmdProcessLine();
+                buffer[i] = '\0';
+                i=0;
+                state = CMD_PROCESS;
 			}
 		}
 			else{ //overflow
 				i=0;
+				state=CMD_ERROR;
 				status=CMD_ERR_OVERFLOW;
 			}
-		}
+		break;
+	case CMD_PROCESS:
+        status = cmdProcessLine();
+        state = CMD_IDLE;
+        break;
+
+    case CMD_ERROR:
+        status = CMD_ERR_OVERFLOW;
+        i = 0;
+        state = CMD_IDLE;
+    break;
+    case CMD_EXEC:
+        state = CMD_IDLE;
+        break;
+    default:
+    	state=CMD_IDLE;
+    	break;
+	}
 	return;
 	}
 
@@ -108,7 +138,7 @@ void cmdPoll(void)
 
 //Imprime por UART la lista de comandos disponibles
 void cmdPrintHelp(void){
-
+return;
 }
 
 #endif /* API_SRC_API_CMDPARSER_C_ */
