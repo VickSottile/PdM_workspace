@@ -1,5 +1,5 @@
 /*
- * API_led.h
+ * board_port.h
  *
  *  Created on: 9 abr 2026
  *      Author: vicks
@@ -28,13 +28,15 @@ typedef enum {
 } led_state_t;
 
 
-//TIEMPOC TICKS DEL CONTROLADOR
+//TIEMPOS TICKS DEL CONTROLADOR
 typedef uint32_t ticker_t;
+
+
 
 /* Inicialización de las GPIO a utilizar*/
 void MX_GPIO_Init(void);
 
-/* LED */
+/* FUNCIONES BASICAS PARA EL MANEJO DE LEDs */
 void ledOn(void);
 void ledOff(void);
 void ledToggle(uint32_t tiempo);

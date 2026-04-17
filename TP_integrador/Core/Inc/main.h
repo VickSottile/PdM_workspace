@@ -36,6 +36,7 @@ extern "C" {
 #include "MEF.h"
 #include "board_port.h"
 #include "API_uart.h"
+#include "I2C_port.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
