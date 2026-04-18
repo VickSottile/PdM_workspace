@@ -37,6 +37,7 @@ extern "C" {
 #include "board_port.h"
 #include "API_uart.h"
 #include "I2C_port.h"
+#include "API_lcd.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

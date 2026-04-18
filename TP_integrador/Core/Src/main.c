@@ -119,10 +119,13 @@ int main(void)
   //MX_USART2_UART_Init();
   //MX_I2C1_Init();
 
-  I2Cinit();
+
   /* USER CODE BEGIN 2 */
+  I2Cinit();
   delayInit(&led1, delayV[i]);
   uartInit();
+  LCD_init();
+  LCD_writeString("Hola Mundillo");
   /* USER CODE END 2 */
 
   /* Infinite loop */

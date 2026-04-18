@@ -6,10 +6,11 @@
  */
 
 #include "I2C_port.h"
-#define ADDRESS 0x27
+#define ADDRESS 0x27 //podria ser una variable static y que se cambie con un setter para otros modulos
 
 
 static uint8_t data;
+static uint8_t timeD;
 
 I2C_HandleTypeDef hi2c1;
 
@@ -49,3 +50,7 @@ void I2Cinit() {
  void I2CReadByte(){
 	HAL_I2C_Master_Receive(&hi2c1, ADDRESS <<1, &data, 1, HAL_MAX_DELAY);
 }
+
+ void I2CDelay(uint8_t timeD){
+	 HAL_Delay(timeD);
+ }
