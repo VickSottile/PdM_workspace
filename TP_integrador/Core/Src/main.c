@@ -17,6 +17,13 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+
+#include <API_delay.h>
+#include <stdbool.h>
+#include <stm32f4xx_hal_def.h>
+#include <stm32f4xx_hal_flash_ex.h>
+#include <stm32f4xx_hal_pwr_ex.h>
+#include <stm32f4xx_hal_rcc.h>
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
