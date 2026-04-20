@@ -32,12 +32,12 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "API_debounce.h"
+#include <debounce.h>
 #include "MEF.h"
 #include "board_port.h"
-#include "API_uart.h"
+#include <uart.h>
 #include "I2C_port.h"
-#include "API_lcd.h"
+#include <lcd.h>
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

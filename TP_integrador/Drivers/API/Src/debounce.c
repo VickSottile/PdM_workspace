@@ -4,7 +4,7 @@
  *  Created on: 30 mar 2026
  *      Author: vicks
  */
-#include "API_debounce.h"
+#include <debounce.h>
 #include <stdbool.h>
 #include "board_port.h"
 #define DEBTIME 40
@@ -13,6 +13,13 @@ tick_t debounce;
 static debounceState_t estadoActual; // variable que refleja el estado de la MEF del debounce
 static bool_t keypressed; // se pone en true cuando ocurre un flanco descendente y se pone en false cuando se llame a la función readKey()
 
+static void buttonPressed(void){			// debe encender el LED
+
+	ledOn();
+}
+static void buttonReleased(void){		// debe apagar el LED
+	ledOff();
+}
 
 
 void debounceFSM_init() //  carga el estado inicial
@@ -37,7 +44,7 @@ void debounceFSM_update()	// debe leer las entradas, resolver la lógica de tran
 
 			}else{
 				estadoActual=BUTTON_UP;
-			}
+			}}
 				break;
 		case BUTTON_DOWN:
 			if(GPIOState()== GPIO_PIN_SET){
@@ -45,7 +52,7 @@ void debounceFSM_update()	// debe leer las entradas, resolver la lógica de tran
 				debounce=getTick();
 				buttonPressed();
 				//Aca deberia iniciar un contador llamar a una funcion o solo usar una variable y guardar el tiempo de la Hall como en BUTTON_UP
-			}}
+			}
 				break;
 		case BUTTON_RISSING:
 			//Aca la misa logica que en BUTTON_FALLING
@@ -64,19 +71,10 @@ void debounceFSM_update()	// debe leer las entradas, resolver la lógica de tran
 	}
 }
 
-static void buttonPressed(void){			// debe encender el LED
 
-	ledOn();
-}
-static void buttonReleased(void){		// debe apagar el LED
-	ledOff();
-}
 bool_t readKey(){
 	bool_t key=keypressed;
-	if(key==true)
-	{
-		uartSendString((uint8_t*)"Boton presionado\r\n");
-	}
+
 	keypressed=false;
 
 	return key;

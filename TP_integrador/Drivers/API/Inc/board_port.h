@@ -14,12 +14,15 @@
 
 #include "stm32f4xx_hal.h"
 /* Private defines*/
+
 /*Borrarlos del main.h*/
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
 
 #define LD2_Pin GPIO_PIN_5
 #define LD2_GPIO_Port GPIOA
+
+
 
 
 //ESTADOS DEL LED
@@ -35,6 +38,8 @@ typedef uint32_t ticker_t;
 
 /* Inicialización de las GPIO a utilizar*/
 void MX_GPIO_Init(void);
+
+void setPin (GPIO_PinState);
 
 /* FUNCIONES BASICAS PARA EL MANEJO DE LEDs */
 void ledOn(void);
@@ -53,9 +58,7 @@ ticker_t getTick(void);
 
 /*Comunicaciones I2C*/
 
-static void I2C_Write_Byte(uint8_t data);
 
-static void  I2C_Read_Byte(uint8_t data);
 
 void Error_Handler(void);
 

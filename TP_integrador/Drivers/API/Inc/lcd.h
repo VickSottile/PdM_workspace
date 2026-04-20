@@ -5,8 +5,8 @@
  *      Author: vicks
  */
 
-#ifndef API_INC_API_LCD_H_
-#define API_INC_API_LCD_H_
+#ifndef API_INC_LCD_H_
+#define API_INC_LCD_H_
 
 #include "I2C_port.h"
 
@@ -15,13 +15,13 @@ void LCD_clear(void);
 void LCD_showWelcome(void);
 void LCD_writeString(char * str);
 void LCD_delay(uint8_t timeD);
-void LCD_send_nibble(uint8_t nibble, uint8_t rs);
-void LCD_send_byte(uint8_t byte, uint8_t rs);
+//void LCD_send_nibble(uint8_t nibble, uint8_t rs);
+//void LCD_send_byte(uint8_t byte, uint8_t rs);
 
-static void LCD_write_command(uint8_t cmd);
+
 
 
 // void LCD_showData(soil_data_t data);
 
 
-#endif /* API_INC_API_LCD_H_ */
+#endif /* API_INC_LCD_H_ */

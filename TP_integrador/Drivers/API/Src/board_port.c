@@ -6,9 +6,8 @@
  */
 
 #define LED_DELAY 500 //delay del parpadeo
-
-#include <board_port.h>
-#include "API_delay.h"
+#include <delay.h>
+#include "board_port.h"
 #include "stm32f4xx_hal.h"
 
 
@@ -48,7 +47,10 @@ void MX_GPIO_Init(void)
 
 }
 
-
+ticker_t getTick(void){
+	ticker_t time= HAL_GetTick();
+	return(time);
+}
 
 
 void ledOn(void){			// debe encender el LED
@@ -94,10 +96,7 @@ GPIO_PinState GPIOState(){
 	return(HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin));
 }
 
-ticker_t getTick(void){
-	ticker_t time= HAL_GetTick();
-	return(time);
-}
+
 
 void Error_Handler(void)
 {

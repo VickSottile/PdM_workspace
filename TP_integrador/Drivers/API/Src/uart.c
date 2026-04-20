@@ -4,10 +4,10 @@
  *  Created on: 2 abr 2026
  *      Author: vicks
  */
-#include "API_uart.h"
+#include <uart.h>
 
 #define TIMEOUT_UART2 10
- UART_HandleTypeDef huart2;
+static UART_HandleTypeDef huart2;
 
 HAL_StatusTypeDef transmitido;
 

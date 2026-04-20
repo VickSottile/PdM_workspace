@@ -5,8 +5,8 @@
  *      Author: vicks
  */
 
-#ifndef API_INC_API_LCDPORT_H_
-#define API_INC_API_LCDPORT_H_
+#ifndef API_INC_LCDPORT_H_
+#define API_INC_LCDPORT_H_
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -15,4 +15,4 @@
 #include "stm32f4xx_hal.h"
 
 
-#endif /* API_INC_API_LCDPORT_H_ */
+#endif /* API_INC_LCDPORT_H_ */

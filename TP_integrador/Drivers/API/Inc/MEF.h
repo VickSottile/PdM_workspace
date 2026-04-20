@@ -7,14 +7,17 @@
 
 #ifndef API_INC_MEF_H_
 #define API_INC_MEF_H_
+#include <debounce.h>
 #include <stdbool.h>
-#include <API_debounce.h>
 #include "board_port.h"
+#include "soilModBus.h"
+
 
 
 typedef enum{
     INIT=0,
 	IDLE,
+	REQ_SENSING,
 	SENSING,
 	SHOW,
 	ERROR1
@@ -25,5 +28,8 @@ void MEFUpdate (void);
 
 /*Inicializacion de la MEF*/
 void MEF_init(void);
+
+/*Setter para saber cuando tengo un dato disponible*/
+void MEF_setDataReady (void);
 
 #endif /* API_INC_MEF_H_ */

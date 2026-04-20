@@ -5,11 +5,12 @@
  *      Author: Victoria Sottile
  */
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdint.h>
 #include <stdbool.h>
+#include "board_port.h"
 
 
 /* USER CODE END Includes */

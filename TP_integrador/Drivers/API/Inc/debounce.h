@@ -5,11 +5,11 @@
  *      Author: vicks
  */
 
+#include <delay.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <uart.h>
 #include "board_port.h"
-#include "API_uart.h"
-#include "API_delay.h"
 
 #ifndef API_INC_API_DEBOUNCE_H_
 #define API_INC_API_DEBOUNCE_H_
@@ -30,8 +30,7 @@ typedef enum{
 
  void debounceFSM_init();		// debe cargar el estado inicial
  void debounceFSM_update();	// debe leer las entradas, resolver la lógica de transición de estados y actualizar las salidas
-static void buttonPressed();			// debe encender el LED
-static void buttonReleased();		// debe apagar el LED
+
 bool_t readKey(); /* La función readKey debe leer una variable interna del módulo y devolver true o false si la tecla fue presionada.  Si devuelve true, debe resetear (poner en false) el estado de la variable.*/
 
 

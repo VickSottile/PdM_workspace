@@ -10,7 +10,7 @@
 
 
 static uint8_t data;
-static uint8_t timeD;
+//static uint8_t timeD;
 
 I2C_HandleTypeDef hi2c1;
 

@@ -3,18 +3,19 @@
  *
  *  Created on: 2 abr 2026
  *      Author: vicks
+ *  About: Capa de abstracción de hardware para nucleo stm32f446RE
+ *  		para comunicacion UART/COM
  */
 
-#ifndef API_INC_API_UART_H_
-#define API_INC_API_UART_H_
+#ifndef API_INC_UART_H_
+#define API_INC_UART_H_
 
-#include "main.h"
+
 #include "stm32f4xx_hal.h"
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include "string.h"
-#include "API_uart.h"
 #include "board_port.h"
 
 /*Defines que traigo del main*/
@@ -32,4 +33,4 @@ void uartSendStringSize(uint8_t * pstring, uint16_t size); //envía el tamaño d
 void uartReceiveStringSize(uint8_t * pstring, uint16_t size); // Recibe el tamaño del string
 bool_t uartDataAvailable(void);
 
-#endif /* API_INC_API_UART_H_ */
+#endif /* API_INC_UART_H_ */
