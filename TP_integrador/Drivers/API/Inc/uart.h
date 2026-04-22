@@ -12,10 +12,8 @@
 
 
 #include "stm32f4xx_hal.h"
-#include <stdint.h>
-#include <stdbool.h>
 #include <stdio.h>
-#include "string.h"
+#include <string.h>
 #include "board_port.h"
 
 /*Defines que traigo del main*/

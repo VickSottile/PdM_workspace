@@ -89,6 +89,11 @@ void LCD_setCursor(uint8_t row, uint8_t col){
 
 //Sobre escribe la linea completa a partir de situarse en una fila y columna
 void LCD_writeStringRC(uint8_t row, uint8_t col, const char *str){
+
+	if (str == NULL || row >= ROWS || col >= COLUMNS) {
+		return;
+	}
+
 	LCD_setCursor(row,col);
 	uint8_t count=col;
 	while(*str && count < COLUMNS){
@@ -96,7 +101,7 @@ void LCD_writeStringRC(uint8_t row, uint8_t col, const char *str){
 		count++;
 	}
 	//Rellenar con esacios hasta el final de la linea
-	while(count<16){
+	while(count<COLUMNS){
 		LCD_write_data(' ');
 		count++;
 	}
@@ -124,6 +129,10 @@ void LCD_clear(){
 }
 
 void LCD_writeString(char * str){
+	if (str == NULL)
+	{
+		return;
+	}
 	LCD_setCursor(0,0);
 	 while(*str)   // mientras no sea '\0'
 	    {

@@ -5,15 +5,15 @@
  *      Author: vicks
  */
 
-#include "I2C_port.h"
-#define ADDRESS 0x27 //podria ser una variable static y que se cambie con un setter para otros modulos
+#include <lcd_I2C_port.h>
+#define ADDRESS 0x27 //mejora posible: podria ser una variable static y que se cambie con un setter para otros modulos
 
 
 
 //static uint8_t timeD;
 
-I2C_HandleTypeDef hi2c1;
-HAL_StatusTypeDef status;
+static I2C_HandleTypeDef hi2c1;
+static HAL_StatusTypeDef status;
 
 void I2Cinit() {
 

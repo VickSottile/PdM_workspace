@@ -71,6 +71,10 @@ void startSoilSensor(){
  * Funcion que parsea el buffer rxBuf y rellena soilData*/
 static bool parseResponse(void)
 {
+	//Verificacion de que el buffer esté completo antes de parsear
+	if (rxIdx < RESPONSE_LEN) {
+		return false;
+	}
 	//Validación de la respuesta esperada
 	if(rxBuffer[0] != SLAVE_ADDRESS || rxBuffer[1]!=0x03|| rxBuffer[2]!=0x06){
 		return false;

@@ -36,7 +36,7 @@ extern "C" {
 #include "MEF.h"
 #include "board_port.h"
 #include <uart.h>
-#include "I2C_port.h"
+#include <lcd_I2C_port.h>
 #include <lcd.h>
 /* USER CODE END Includes */
 

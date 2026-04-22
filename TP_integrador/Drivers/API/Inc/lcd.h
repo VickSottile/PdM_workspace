@@ -8,7 +8,7 @@
 #ifndef API_INC_LCD_H_
 #define API_INC_LCD_H_
 
-#include "I2C_port.h"
+#include <lcd_I2C_port.h>
 
 void LCD_init(void);
 void LCD_clear(void);

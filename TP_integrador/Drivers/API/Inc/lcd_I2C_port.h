@@ -5,8 +5,8 @@
  *      Author: vicks
  */
 
-#ifndef API_INC_I2C_PORT_H_
-#define API_INC_I2C_PORT_H_
+#ifndef API_INC_LCD_I2C_PORT_H_
+#define API_INC_LCD_I2C_PORT_H_
 
 #include "types.h"
 #include "stm32f4xx_hal.h"
@@ -19,4 +19,4 @@ uint8_t I2CReadByte(); //prototipo de función para recibir un dato por I2C
 void I2CDelay(uint8_t timeD); //función de delay
 
 
-#endif /* API_INC_I2C_PORT_H_ */
+#endif /* API_INC_LCD_I2C_PORT_H_ */

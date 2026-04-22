@@ -8,8 +8,7 @@
 #ifndef API_INC_BOARD_PORT_H_
 #define API_INC_BOARD_PORT_H_
 
-#include <stdint.h>
-#include <stdbool.h>
+#include "types.h"
 
 
 #include "stm32f4xx_hal.h"

@@ -9,7 +9,7 @@
 #define TIMEOUT_UART2 10
 static UART_HandleTypeDef huart2;
 
-HAL_StatusTypeDef transmitido;
+static HAL_StatusTypeDef transmitido;
 
 static  bool_t uartRxReady=false; // variable interna que refleja si hay datos para leer
 
