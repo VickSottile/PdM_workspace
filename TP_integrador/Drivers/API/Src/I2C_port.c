@@ -9,10 +9,11 @@
 #define ADDRESS 0x27 //podria ser una variable static y que se cambie con un setter para otros modulos
 
 
-static uint8_t data;
+
 //static uint8_t timeD;
 
 I2C_HandleTypeDef hi2c1;
+HAL_StatusTypeDef status;
 
 void I2Cinit() {
 
@@ -44,13 +45,26 @@ void I2Cinit() {
 
  void I2CWriteByte(uint8_t data)
 {
-	HAL_I2C_Master_Transmit(&hi2c1, ADDRESS <<1, &data, 1, HAL_MAX_DELAY);
+	status = HAL_I2C_Master_Transmit(&hi2c1, ADDRESS <<1, &data, 1, HAL_MAX_DELAY);
+	if (status!=HAL_OK){
+		Error_Handler();
 	}
+	return;
 
- void I2CReadByte(){
-	HAL_I2C_Master_Receive(&hi2c1, ADDRESS <<1, &data, 1, HAL_MAX_DELAY);
 }
+
+ uint8_t I2CReadByte(){
+	 uint8_t receivedByte=0;
+
+	status= HAL_I2C_Master_Receive(&hi2c1, ADDRESS <<1, &receivedByte, 1, HAL_MAX_DELAY);
+	if (status!=HAL_OK){
+			Error_Handler();
+		}
+		return receivedByte;
+ }
+
 
  void I2CDelay(uint8_t timeD){
 	 HAL_Delay(timeD);
+	 	return;
  }

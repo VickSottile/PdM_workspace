@@ -8,9 +8,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdint.h>
-#include <stdbool.h>
-#include "board_port.h"
+
 
 
 /* USER CODE END Includes */
@@ -18,6 +16,8 @@
 #ifndef API_INC_API_DELAY_H_
 #define API_INC_API_DELAY_H_
 
+#include "types.h"
+#include "board_port.h"
 
 typedef uint32_t tick_t; // Qué biblioteca se debe incluir para que esto compile? stdint.h
 //se define en un typedef para mayor portabilidad y se usa tick_t como "tics del sistema"

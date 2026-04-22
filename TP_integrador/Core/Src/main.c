@@ -131,8 +131,8 @@ int main(void)
   I2Cinit();
   delayInit(&led1, delayV[i]);
   uartInit();
-  LCD_init();
-  LCD_writeString("Hola Mundillo");
+  //LCD_init();
+  //LCD_writeString("Hola Mundillo");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -145,7 +145,7 @@ int main(void)
 	 debounceFSM_update();
 
 	 MEFUpdate(); //MEF + UART
-	 //ledUpdate();
+	 ledUpdate();
 
 	  /*PUNTO 1 y ECHO*/
 	 /* uartReceiveStringSize(&dato, 1);

@@ -5,20 +5,17 @@
  *      Author: vicks
  */
 
-#include <delay.h>
-#include <stdint.h>
-#include <stdbool.h>
-#include <uart.h>
-#include "board_port.h"
+
 
 #ifndef API_INC_API_DEBOUNCE_H_
 #define API_INC_API_DEBOUNCE_H_
 
+#include "delay.h"
+#include "types.h"
+#include "uart.h"
+#include "board_port.h"
 
 
-
-typedef uint32_t tick_t;
-typedef bool bool_t;
 
 // Nuevo tipo de datos enumerado llamado estadoMEF_t
 typedef enum{

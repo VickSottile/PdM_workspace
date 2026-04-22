@@ -55,6 +55,11 @@ void uartSendString(uint8_t *pstring) //envia el  String
 {
 	if (pstring!=NULL)
 	{
+		/* Verifica que la longitud no sea cero*/
+		uint16_t len =(uint16_t)strlen((char*)pstring);
+		if (len<1){
+			return;
+		}
 		transmitido = HAL_UART_Transmit(&huart2, pstring, strlen((char*)pstring),TIMEOUT_UART2);
 		if (transmitido != HAL_OK)
 			{

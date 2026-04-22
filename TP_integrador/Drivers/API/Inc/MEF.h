@@ -9,8 +9,11 @@
 #define API_INC_MEF_H_
 #include <debounce.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include "board_port.h"
 #include "soilModBus.h"
+#include "lcd.h"
+
 
 
 

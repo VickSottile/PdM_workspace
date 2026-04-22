@@ -39,7 +39,7 @@ typedef uint32_t ticker_t;
 /* Inicialización de las GPIO a utilizar*/
 void MX_GPIO_Init(void);
 
-void setPin (GPIO_PinState);
+
 
 /* FUNCIONES BASICAS PARA EL MANEJO DE LEDs */
 void ledOn(void);

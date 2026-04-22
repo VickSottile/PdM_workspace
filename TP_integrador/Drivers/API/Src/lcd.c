@@ -5,7 +5,7 @@
  *      Author: vicks
  */
 
-#include <lcd.h>
+#include "lcd.h"
 
 #define MODO_4BIT 0x28
 #define RETURN_HOME 0x02
@@ -14,6 +14,16 @@
 #define CONTROL_DISPLAY 0x08
 #define DISPLAY_ON 0x04
 #define CLEAR_LCD 0x01
+#define COLUMNS 16
+#define ROWS 2
+#define CLR_DELAY 5
+#define LINEA2 0x40
+#define LINEA1 0x00
+#define SET_CURSORCMD 0x80
+#define FILA1 0
+#define FILA2 1
+#define COL_INICIO 0
+
 
 static uint8_t LCD_INIT_CMD[]= {MODO_4BIT, CONTROL_DISPLAY, RETURN_HOME, ENTRY_MODE|AUTOINCREMENT,
 		CONTROL_DISPLAY|DISPLAY_ON,CLEAR_LCD};
@@ -59,18 +69,62 @@ void LCD_delay(uint8_t timeD){
 	I2CDelay(timeD);
 }
 
+/*Funcion para posicionar el cursor
+ * el comando para mover el cursor es 0x80
+ * linea 1 0x00 a 0x0F entonces comando 0x80+col
+ * linea 2 0x40 a 0x4F entonces el comando es 0xC0+col
+ * 0x80+0x40=0xC0
+
+ * */
+void LCD_setCursor(uint8_t row, uint8_t col){
+	uint8_t addr;
+	if(row==0){
+		addr=LINEA1 + SET_CURSORCMD+col;
+	}else{
+		addr= LINEA2 + SET_CURSORCMD+ col;
+	}
+	LCD_write_command(addr);
+}
 
 
+//Sobre escribe la linea completa a partir de situarse en una fila y columna
+void LCD_writeStringRC(uint8_t row, uint8_t col, const char *str){
+	LCD_setCursor(row,col);
+	uint8_t count=col;
+	while(*str && count < COLUMNS){
+		LCD_write_data((uint8_t)*str++);
+		count++;
+	}
+	//Rellenar con esacios hasta el final de la linea
+	while(count<16){
+		LCD_write_data(' ');
+		count++;
+	}
+}
 
+//Funcion que escibre el string recibido en la fila 1 - wrapper de LCD_writeStringRC
+void LCD_writeStringF1(const char *str){
+	LCD_writeStringRC(FILA1, COL_INICIO, str);
+}
+
+
+//Funcion que escibre el string recibido en la fila 2 - wrapper de LCD_writeStringRC
+void LCD_writeStringF2(const char *str){
+	LCD_writeStringRC(FILA2, COL_INICIO,str);
+}
+
+
+//
 
 
 void LCD_clear(){
+	LCD_write_command(CLEAR_LCD);
+	LCD_delay(CLR_DELAY);
 
 }
-void LCD_showWelcome(){
 
-}
 void LCD_writeString(char * str){
+	LCD_setCursor(0,0);
 	 while(*str)   // mientras no sea '\0'
 	    {
 	        LCD_write_data((uint8_t)*str);

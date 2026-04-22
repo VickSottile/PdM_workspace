@@ -4,28 +4,23 @@
  *  Created on: 30 mar 2026
  *      Author: vicks
  */
-#include <debounce.h>
-#include <stdbool.h>
-#include "board_port.h"
-#define DEBTIME 40
+#include "debounce.h"
 
-tick_t debounce;
+
+
+
+#define DEBTIME 40 /*Tiempo de espera amortiguacion del antirrebote*/
+
+static tick_t debounce;
 static debounceState_t estadoActual; // variable que refleja el estado de la MEF del debounce
 static bool_t keypressed; // se pone en true cuando ocurre un flanco descendente y se pone en false cuando se llame a la función readKey()
 
-static void buttonPressed(void){			// debe encender el LED
-
-	ledOn();
-}
-static void buttonReleased(void){		// debe apagar el LED
-	ledOff();
-}
 
 
 void debounceFSM_init() //  carga el estado inicial
 {
 	estadoActual = BUTTON_UP;
-	buttonReleased();
+
 	}
 void debounceFSM_update()	// debe leer las entradas, resolver la lógica de transición de estados y actualizar las salidas
 {
@@ -50,8 +45,8 @@ void debounceFSM_update()	// debe leer las entradas, resolver la lógica de tran
 			if(GPIOState()== GPIO_PIN_SET){
 				estadoActual=BUTTON_RISSING;
 				debounce=getTick();
-				buttonPressed();
-				//Aca deberia iniciar un contador llamar a una funcion o solo usar una variable y guardar el tiempo de la Hall como en BUTTON_UP
+
+
 			}
 				break;
 		case BUTTON_RISSING:

@@ -10,6 +10,7 @@
 
 #include "uart_rs485.h"
 #include "board_port.h"
+#include "uart.h"
 
 
 
@@ -31,8 +32,9 @@ typedef struct {
 
 void soilSensorInit(void);
 void MEF_soilSensorUpdate(void);
-void requestSoilData(void); // Setter para solicitar la medición
+bool_t requestSoilData(void); // Setter para solicitar la medición
 void startSoilSensor(void); //Setter del primer estado de la maquina de estados
 MEFSensorState_t requestSoilDataState(); //Getter del estado de la MEF del Sensor
+const soilsensor_data_t * soilSensorGetData(void);// getter devuelve puntero a datos validos o null si no hay datos
 
 #endif /* API_INC_SOILMODBUS_H_ */
