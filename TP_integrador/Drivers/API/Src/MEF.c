@@ -131,7 +131,7 @@ void MEFUpdate (void) {
 	        mef = SENSING;
 	        uartSendString((uint8_t*)"Comence la medicion\r\n");
 	    } else {
-	        uartSendString((uint8_t*)"Esperando sensor libre\r\n");
+	        uartSendString((uint8_t*)"Esperando sensor \r\n");
 	    }
 	    break;
 
@@ -165,8 +165,7 @@ void MEFUpdate (void) {
 	case SHOW:
 	{
 	  if(!flag) {
-	      const soilsensor_data_t *data =
-	          soilSensorGetData();
+	      const soilsensor_data_t *data =soilSensorGetData();
 	      if (data != NULL) {
 	          showSensorData(data);
 	      } else {
@@ -176,6 +175,8 @@ void MEFUpdate (void) {
 	      }
 	      flag = true;
 	  }
+
+	  //Delay no bloqueante para mostrar los datos en el lcd durante el WAITTIME2
 	  if((getTick()-time)>=WAITTIME2){
 	      flag=false;
 	      mef=IDLE;
